@@ -1,12 +1,24 @@
 import { join } from "node:path";
 import type { DownloadResult } from "../integration/ytdlp";
-import { extractAudio as extractAudioIntegration } from "../integration/ffmpeg";
+import { extractAudio as ffmpeg } from "../integration/ffmpeg";
 
-export async function extractAudio(download: DownloadResult) {
+export interface AudioStageResult {
+  workspace: DownloadResult["workspace"];
+  audioPath: string;
+}
+
+export async function extractAudio(
+  download: DownloadResult,
+): Promise<AudioStageResult> {
   const outputPath = join(download.workspace.path, "speech.wav");
 
-  return extractAudioIntegration({
+  const result = await ffmpeg({
     videoPath: download.videoPath,
     outputPath,
   });
+
+  return {
+    workspace: download.workspace,
+    audioPath: result.audioPath,
+  };
 }

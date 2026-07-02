@@ -3,6 +3,7 @@ import { logger } from "../utils/logger";
 import { createWorkspace } from "../utils/workspace";
 import { download } from "./downloader";
 import { extractAudio } from "./extract-audio";
+import { transcribeAudio } from "./transcribe";
 
 export async function runPipeline(options: PipelineOptions) {
   const workspace = await createWorkspace();
@@ -16,4 +17,8 @@ export async function runPipeline(options: PipelineOptions) {
   const audioResult = await extractAudio(video);
 
   logger.success(`Audio ready: ${audioResult.audioPath}`);
+
+  const transcript = await transcribeAudio(audioResult);
+
+  logger.success(`Transcript ready: ${transcript.transcriptPath}`);
 }
