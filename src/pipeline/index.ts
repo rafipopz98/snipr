@@ -1,14 +1,14 @@
 import type { PipelineOptions } from "../types/pipeline";
 import { logger } from "../utils/logger";
+import { createWorkspace } from "../utils/workspace";
+import { download } from "./downloader";
 
 export async function runPipeline(options: PipelineOptions) {
-  logger.info(`Starting pipeline for: ${options.input}`);
+  const workspace = await createWorkspace();
 
-  logger.info("Download");
-  logger.info("Extract Audio");
-  logger.info("Transcribe");
-  logger.info("Analyze");
-  logger.info("Render");
+  logger.info(`Workspace: ${workspace.id}`);
 
-  logger.success("Pipeline complete.");
+  const video = await download(options.input, workspace);
+
+  logger.success(`Video ready: ${video.videoPath}`);
 }
