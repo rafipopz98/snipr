@@ -18,12 +18,8 @@ export async function downloadVideo(
 ): Promise<DownloadResult> {
   const output = join(options.workspace.path, "video.%(ext)s");
 
-  const videoPath = await $`
-yt-dlp
--o ${output}
---print after_move:filepath
-${options.url}
-`.text();
+  const videoPath =
+    await $`yt-dlp -o ${output} --print after_move:filepath ${options.url}`.text();
 
   logger.info(`Downloaded to ${videoPath.trim()}`);
 
